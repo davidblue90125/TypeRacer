@@ -30,15 +30,10 @@ function updateSampleText() {
 	sampleTextDiv.textContent = text;
 }
 
-
-function onDifficultyChange() {
-	updateSampleText();
-}
-
 document.addEventListener('DOMContentLoaded', function() {
 	const difficultySelect = document.getElementById('difficulty');
 	if (difficultySelect) {
-		difficultySelect.addEventListener('change', onDifficultyChange);
+		difficultySelect.addEventListener('change', updateSampleText);
 		updateSampleText(); // Set initial text
 	}
 });
