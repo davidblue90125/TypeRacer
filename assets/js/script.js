@@ -1,40 +1,47 @@
-// Typing test sample texts by difficulty
-const sampleTexts = {
-	easy: [
-		"The cat sat on the mat.",
-		"Dogs bark at night.",
-		"Birds fly in the sky."
-	],
-	medium: [
-		"Typing is a useful skill for everyone.",
-		"Practice makes perfect in every activity.",
-		"The quick brown fox jumps over the lazy dog."
-	],
-	hard: [
-		"She sells seashells by the seashore, and the shells she sells are surely seashells.",
-		"Amazingly few discotheques provide jukeboxes.",
-		"The five boxing wizards jump quickly over the lazy dog."
-	]
-};
-
-function getRandomText(level) {
-	const texts = sampleTexts[level] || sampleTexts.easy;
-	return texts[Math.floor(Math.random() * texts.length)];
-}
-
-function updateSampleText() {
-	const difficultySelect = document.getElementById('difficulty');
-	const sampleTextDiv = document.getElementById('sample-text');
-	const level = difficultySelect.value;
-	const text = getRandomText(level);
-	sampleTextDiv.textContent = text;
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-	const difficultySelect = document.getElementById('difficulty');
-	if (difficultySelect) {
-		difficultySelect.addEventListener('change', updateSampleText);
-		updateSampleText(); // Set initial text
-	}
-});
+    const easyTexts = [
+        "The cat sat on the mat.",
+        "A quick brown fox jumps over the lazy dog.",
+        "She sells seashells by the seashore."
+    ];
 
+    const mediumTexts = [
+        "To be or not to be, that is the question.",
+        "All that glitters is not gold.",
+        "A journey of a thousand miles begins with a single step."
+    ];
+
+    const hardTexts = [
+        "It was the best of times, it was the worst of times.",
+        "In the beginning God created the heavens and the earth.",
+        "The only thing we have to fear is fear itself."
+    ];
+
+    const difficultySelect = document.getElementById('difficulty');
+    const sampleTextDiv = document.getElementById('sample-text');
+
+    function getRandomText(textArray) {
+        const randomIndex = Math.floor(Math.random() * textArray.length);
+        return textArray[randomIndex];
+    }
+
+    function updateSampleText() {
+        let selectedDifficulty = difficultySelect.value;
+        let selectedText;
+
+        if (selectedDifficulty === 'easy') {
+            selectedText = getRandomText(easyTexts);
+        } else if (selectedDifficulty === 'medium') {
+            selectedText = getRandomText(mediumTexts);
+        } else if (selectedDifficulty === 'hard') {
+            selectedText = getRandomText(hardTexts);
+        }
+
+        sampleTextDiv.textContent = selectedText;
+    }
+
+    difficultySelect.addEventListener('change', updateSampleText);
+
+    // Initialize with a random text from the default difficulty level
+    updateSampleText();
+});
