@@ -12,18 +12,43 @@
     <title>TypeRacer</title>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center my-4">
-                    <h1>TypeRacer</h1>
-                    <button class="btn btn-light mt-3" id="instructions-btn">
-                        Instructions
-                    </button>
+        <header>
+                <div class="container">
+                        <div class="row">
+                                <div class="col-md-12 text-center my-4">
+                                        <h1>TypeRacer</h1>
+                                        <button class="btn btn-light mt-3" id="instructions-btn" data-bs-toggle="modal" data-bs-target="#instructionsModal">
+                                                Instructions
+                                        </button>
+                                </div>
+                        </div>
+                </div>
+        </header>
+
+        <!-- Instructions Modal -->
+        <div class="modal fade" id="instructionsModal" tabindex="-1" aria-labelledby="instructionsModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="instructionsModalLabel">How to Use TypeRacer</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            <li>Select a difficulty level from the dropdown.</li>
+                            <li>Click Start or begin typing to start the test.</li>
+                            <li>Type the sample sentence as accurately and quickly as possible.</li>
+                            <li>Press Enter or click Stop to finish the test.</li>
+                            <li>View your results for time, WPM, and accuracy.</li>
+                            <li>Click Retry to try a new sentence of the same difficulty.</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </header>
 
     <main>
         <div class="container my-5">

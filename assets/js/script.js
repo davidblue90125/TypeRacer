@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
     endTime = null;
     disableButton('start-btn', true);
     disableButton('stop-btn', false);
-    clearUserInput();
     }
 
 function stopTest() {
@@ -59,8 +58,8 @@ function stopTest() {
         const elapsedSeconds = ((endTime - startTime) / 1000).toFixed(2);
         displayTime(elapsedSeconds);
     }
-    disableButton('start-btn', false);
-    disableButton('stop-btn', true);
+    startTime = null;
+    endTime = null;
 }
 
 function disableButton(buttonId, shouldDisable) {
@@ -89,10 +88,43 @@ function clearUserInput() {
 function setupTestButtons() {
     const startBtn = document.getElementById('start-btn');
     const stopBtn = document.getElementById('stop-btn');
+    const retryBtn = document.getElementById('retry-btn');
     if (startBtn && stopBtn) {
-        startBtn.addEventListener('click', startTest);
-        stopBtn.addEventListener('click', stopTest);
+        startBtn.addEventListener('click', function() {
+            startTest();
+            disableButton('start-btn', true);
+            disableButton('stop-btn', false);
+        });
+        stopBtn.addEventListener('click', function() {
+            stopTest();
+            disableButton('start-btn', false);
+            disableButton('stop-btn', true);
+        });
         disableButton('stop-btn', true); // Stop button disabled initially
+    }
+    if (retryBtn) {
+        retryBtn.addEventListener('click', function() {
+            startTime = null;
+            endTime = null;
+            // Load new sample sentence
+            updateSampleText();
+            // Clear and enable input
+            const input = document.getElementById('user-input');
+            if (input) {
+                input.value = '';
+                input.disabled = false;
+                input.focus();
+            }
+            // Reset Results area
+            displayTime(0);
+            displayWPM(0);
+            displayLevel(difficultySelect.value);
+            // Disable retry button
+            disableButton('retry-btn', true);
+            // Enable start, disable stop
+            disableButton('start-btn', false);
+            disableButton('stop-btn', true);
+        });
     }
 }
 
@@ -163,7 +195,26 @@ function updateTypingFeedback() {
 function setupTypingFeedback() {
     const userInput = document.getElementById('user-input');
     if (userInput) {
-        userInput.addEventListener('input', updateTypingFeedback);
+        userInput.addEventListener('input', function(e) {
+            // Always disable Start and enable Stop as soon as user types
+            if (userInput.value.trim().length > 0) {
+                disableButton('start-btn', true);
+                disableButton('stop-btn', false);
+            }
+            // Start test if not already started
+            if (!startTime && userInput.value.trim().length > 0) {
+                startTest();
+            }
+            updateTypingFeedback();
+        });
+        userInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                stopTest();
+                disableButton('start-btn', false);
+                disableButton('stop-btn', true);
+            }
+        });
     }
 }
 
