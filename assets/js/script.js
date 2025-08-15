@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+    setupTestButtons();
+
     const easyTexts = [
         "The cat sat on the mat.",
         "A quick brown fox jumps over the lazy dog.",
@@ -19,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const difficultySelect = document.getElementById('difficulty');
     const sampleTextDiv = document.getElementById('sample-text');
+    let startTime = null;
+    let endTime = null;
 
     function getRandomText(textArray) {
         const randomIndex = Math.floor(Math.random() * textArray.length);
@@ -40,7 +44,58 @@ document.addEventListener('DOMContentLoaded', function() {
         sampleTextDiv.textContent = selectedText;
     }
 
+    function startTest() {
+    startTime = performance.now();
+    endTime = null;
+    disableButton('start-btn', true);
+    disableButton('stop-btn', false);
+    clearUserInput();
+    }
+
+function stopTest() {
+    if (startTime) {
+        endTime = performance.now();
+        const elapsedSeconds = ((endTime - startTime) / 1000).toFixed(2);
+        displayTime(elapsedSeconds);
+    }
+    disableButton('start-btn', false);
+    disableButton('stop-btn', true);
+}
+
+function disableButton(buttonId, shouldDisable) {
+    const btn = document.getElementById(buttonId);
+    if (btn) {
+        btn.disabled = shouldDisable;
+    }
+}
+
+function displayTime(time) {
+    const timeSpan = document.getElementById('time');
+    if (timeSpan) {
+        timeSpan.textContent = time;
+    }
+}
+
+function clearUserInput() {
+    const input = document.getElementById('user-input');
+    if (input) {
+        input.value = '';
+        input.focus();
+    }
+}
+
+function setupTestButtons() {
+    const startBtn = document.getElementById('start-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    if (startBtn && stopBtn) {
+        startBtn.addEventListener('click', startTest);
+        stopBtn.addEventListener('click', stopTest);
+        disableButton('stop-btn', true); // Stop button disabled initially
+    }
+}
+
     difficultySelect.addEventListener('change', updateSampleText);
+    
 
     // Initialize with a random text from the default difficulty level
     updateSampleText();
