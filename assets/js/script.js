@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         sampleTextDiv.textContent = selectedText;
+        updateTypingFeedback();
     }
 
     function startTest() {
@@ -81,6 +82,7 @@ function clearUserInput() {
     if (input) {
         input.value = '';
         input.focus();
+        updateTypingFeedback();
     }
 }
 
@@ -140,11 +142,32 @@ function stopTest() {
     disableButton('stop-btn', true);
 }
 
-// ...existing code...
+function updateTypingFeedback() {
+    const userInput = document.getElementById('user-input').value;
+    const sampleText = document.getElementById('sample-text').textContent;
+    const feedbackArea = document.getElementById('feedback-area');
+    const userWords = userInput.trim().split(/\s+/);
+    const sampleWords = sampleText.trim().split(/\s+/);
+
+    let feedbackHTML = '';
+    for (let i = 0; i < userWords.length; i++) {
+        if (userWords[i] === sampleWords[i]) {
+            feedbackHTML += `<span style="color:blue;">${userWords[i]}</span> `;
+        } else {
+            feedbackHTML += `<span style="color:red;">${userWords[i]}</span> `;
+        }
+    }
+    feedbackArea.innerHTML = feedbackHTML.trim();
+}
+
+function setupTypingFeedback() {
+    const userInput = document.getElementById('user-input');
+    if (userInput) {
+        userInput.addEventListener('input', updateTypingFeedback);
+    }
+}
 
     difficultySelect.addEventListener('change', updateSampleText);
-    
-
-    // Initialize with a random text from the default difficulty level
+    setupTypingFeedback();
     updateSampleText();
 });
