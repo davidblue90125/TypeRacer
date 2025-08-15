@@ -94,6 +94,54 @@ function setupTestButtons() {
     }
 }
 
+function getCorrectWordCount(userInput, sampleText) {
+    const userWords = userInput.trim().split(/\s+/);
+    const sampleWords = sampleText.trim().split(/\s+/);
+    let correctCount = 0;
+    for (let i = 0; i < Math.min(userWords.length, sampleWords.length); i++) {
+        if (userWords[i] === sampleWords[i]) {
+            correctCount++;
+        }
+    }
+    return correctCount;
+}
+
+function displayWPM(wpm) {
+    const wpmSpan = document.getElementById('wpm');
+    if (wpmSpan) {
+        wpmSpan.textContent = wpm;
+    }
+}
+
+function displayLevel(level) {
+    const levelSpan = document.getElementById('level');
+    if (levelSpan) {
+        levelSpan.textContent = level.charAt(0).toUpperCase() + level.slice(1);
+    }
+}
+
+function stopTest() {
+    if (startTime) {
+        endTime = performance.now();
+        const elapsedSeconds = ((endTime - startTime) / 1000).toFixed(2);
+        displayTime(elapsedSeconds);
+
+        const userInput = document.getElementById('user-input').value;
+        const sampleText = document.getElementById('sample-text').textContent;
+        const correctWords = getCorrectWordCount(userInput, sampleText);
+        const minutes = (endTime - startTime) / 60000;
+        const wpm = minutes > 0 ? Math.round(correctWords / minutes) : 0;
+        displayWPM(wpm);
+
+        const difficultySelect = document.getElementById('difficulty');
+        displayLevel(difficultySelect.value);
+    }
+    disableButton('start-btn', false);
+    disableButton('stop-btn', true);
+}
+
+// ...existing code...
+
     difficultySelect.addEventListener('change', updateSampleText);
     
 
